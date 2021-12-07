@@ -12,19 +12,55 @@
 
 <body>
     <div style="margin-top: 50px;" class="ui container">
-        <img src="../static/sherlock-icon-13.jpg" alt="sherlock icon" class="ui small centered image">
-
-        <h1 class="ui center aligned header" style="text-transform: capitalize;">
-            <strong>{{apikey}}</strong> Valid IDs
-        </h1>
-
+        <a href="/">
+            <img src="../static/sherlock-icon-13.jpg" alt="sherlock icon" class="ui small centered image">
+        </a>
+        <h1 class="ui center aligned header">Sherlock</h1>
+        <p align="center">
+            Sanitize and filter ids available from customers in CSV files.
+        </p>
         <hr>
 
+        <h4 class="ui horizontal divider header">
+            <i class="bar chart icon"></i>
+            Specifications
+        </h4>
+
+        <table class="ui celled table">
+            <thead>
+                <tr>
+                    <th class="center aligned">Apikey</th>
+                    <th class="center aligned">IDs Valids</th>
+                    <th class="center aligned">IDs Invalids</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td data-label="Apikey" style="text-transform: capitalize;" class="center aligned">{{apikey}}</td>
+                    <td data-label="IDs Valids" class="center aligned">{{list_len}}</td>
+                    <td data-label="IDs Invalids" class="center aligned">{{sanitazed}}</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h4 class="ui horizontal divider header">
+            <i class="list icon"></i>
+            List of IDs
+        </h4>
+        
+        <div class="ui middle aligned divided list">
         {% for id in list %}
-        <div class="ui segment">
-            <p class="ui big header">{{id}}</p>
-        </div>
+            <div class="item">
+                <p>{{id}}</p>
+            </div>
         {% endfor %}
+        </div>
+
+        <a href="/" class="ui labeled icon button" type="button">
+            <i class="left chevron icon"></i>
+            Back
+        </a>
+          
     </div>
 </body>
 
