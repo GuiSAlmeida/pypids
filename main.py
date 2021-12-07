@@ -8,14 +8,20 @@ import base64
 import os
 import json
 from more_itertools import unique_everseen
+from flask import Flask, render_template, request
+from dotenv import load_dotenv
+
+load_dotenv()
 
 PLAT_USER = os.getenv('PLAT_USER')
 PLAT_PASSWORD = os.getenv('PLAT_PASSWORD')
 
-auth = f'{PLAT_USER}:{PLAT_PASSWORD}'
-auth_bytes = auth.encode('ascii')
+auth_str = f'{PLAT_USER}:{PLAT_PASSWORD}'
+auth_bytes = auth_str.encode('ascii')
 base64_bytes = base64.b64encode(auth_bytes)
 PLATFORM_AUTHORIZATION = base64_bytes.decode('ascii')
+
+app = Flask(__name__)
 
 
 def is_plat_product(apikey, id):
@@ -36,16 +42,32 @@ def is_plat_product(apikey, id):
         return False
 
 
-with open('data/usaflex_raw_ids-teste.csv', 'r') as file:
-    ids_list = [id[0] for id in unique_everseen(csv.reader(file))]
+@app.route('/')
+def index():
+    return render_template('index.html')
 
 
-with open('data/usaflex_parsed_ids.csv', 'w') as parsed_file:
-    write_config = csv.writer(parsed_file)
+@app.route('/add', methods=['POST'])
+def add():
+    file = request.files.get("file")
+    apikey = request.form.get('apikey')
 
-    for id in ids_list:
-        is_plat_prod = is_plat_product('usaflex', id)
-        print(is_plat_prod)
+    filename = file.filename
+    file.save(os.path.join('data', filename))
 
-        if is_plat_product('usaflex', id):
-            write_config.writerow([id])
+    with open(f'data/{filename}', 'r') as file:
+        ids_list = [id[0] for id in unique_everseen(csv.reader(file))]
+
+    with open(f'output/{filename}.csv', 'w') as parsed_file:
+        write_config = csv.writer(parsed_file)
+        parsed_list = []
+        for id in ids_list:
+            if is_plat_product(apikey, id):
+                write_config.writerow([id])
+                parsed_list.append(id)
+
+    return render_template('list.html', apikey=apikey, list=parsed_list)
+
+
+if __name__ == "__main__":
+    app.run(debug=True, port=8000)

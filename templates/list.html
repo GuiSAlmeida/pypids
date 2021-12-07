@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sherlock</title>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
+</head>
+
+<body>
+    <div style="margin-top: 50px;" class="ui container">
+        <img src="../static/sherlock-icon-13.jpg" alt="sherlock icon" class="ui small centered image">
+
+        <h1 class="ui center aligned header" style="text-transform: capitalize;">
+            <strong>{{apikey}}</strong> Valid IDs
+        </h1>
+
+        <hr>
+
+        {% for id in list %}
+        <div class="ui segment">
+            <p class="ui big header">{{id}}</p>
+        </div>
+        {% endfor %}
+    </div>
+</body>
+
+</html>
