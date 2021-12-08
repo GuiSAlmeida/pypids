@@ -7,3 +7,10 @@
 <p align="center">
     An aplication to sanitize and filter ids available from customers in CSV files.
 </p>
+
+## Requirements
+Config `.env.example` file with values and save as `.env` only:
+```
+PLAT_USER=<user>
+PLAT_PASSWORD=<password>
+```
