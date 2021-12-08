@@ -3,7 +3,7 @@ import json
 import base64
 
 
-def make_auth(user, password):
+def make_plat_auth(user, password):
     auth_str = f'{user}:{password}'
     auth_bytes = auth_str.encode('ascii')
     base64_bytes = base64.b64encode(auth_bytes)
@@ -11,13 +11,16 @@ def make_auth(user, password):
     return f'Basic {plat_authorization}'
 
 
-def get_plat_product(apikey, id, auth):
+def get_plat_product(apikey, id, user, password):
+    ENDPOINT = f'https://platform.chaordicsystems.com/raas/v2' \
+        f'/clients/{apikey}/products/{id}'
+
+    plat_authorization = make_plat_auth(user, password)
+
     try:
-        ENDPOINT = f'https://platform.chaordicsystems.com/raas/v2' \
-            f'/clients/{apikey}/products/{id}'
         response = requests.get(
             ENDPOINT,
-            headers={'Authorization': auth}
+            headers={'Authorization': plat_authorization}
         )
         return json.loads(response.text)
 

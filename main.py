@@ -1,12 +1,8 @@
-"""
-https://platform.chaordicsystems.com/raas/v2/clients/usaflex/products/115977936
-"""
-
 import csv
 import os
 from more_itertools import unique_everseen
 from flask import Flask, render_template, request
-from utils import get_plat_product, make_auth
+from utils import get_plat_product
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -23,22 +19,24 @@ def index():
 
 @app.route('/', methods=['POST'])
 def add():
-    file = request.files.get("file")
-    apikey = request.form.get('apikey')
     parsed_list = []
     sanitized = 0
-    plat_authorization = make_auth(PLAT_USER, PLAT_PASSWORD)
+
+    file = request.files.get("file")
+    apikey = request.form.get('apikey')
 
     filename = file.filename
-    file.save(os.path.join('data', filename))
+    file.save(os.path.join('static', filename))
 
-    with open(f'data/{filename}', 'r') as file:
-        ids_list = [id[0] for id in unique_everseen(csv.reader(file))]
+    with open(f'static/{filename}', 'r') as input_file:
+        unique_list = [id[0] for id in unique_everseen(csv.reader(input_file))]
 
-    with open(f'output/{filename}.csv', 'w') as parsed_file:
-        write_config = csv.writer(parsed_file)
-        for id in ids_list:
-            product = get_plat_product(apikey, id, plat_authorization)
+    with open(f'output/{filename}.csv', 'w') as output_file:
+        write_config = csv.writer(output_file)
+
+        for id in unique_list:
+            product = get_plat_product(apikey, id, PLAT_USER, PLAT_PASSWORD)
+
             if 'status' in product and 'AVAILABLE' in product['status']:
                 write_config.writerow([id])
                 parsed_list.append(id)
