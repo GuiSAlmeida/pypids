@@ -20,12 +20,13 @@
             Sanitize and filter ids available from customers in CSV files.
         </p>
         <hr>
-    
+        <div class="ui centered inline loader" id="loading"></div>
         <form
             class="ui form"
             action="."
             method="POST"
             enctype="multipart/form-data"
+            id="form"
         >
             <div class="field">
                 <label>Enter Apikey:</label>
@@ -49,6 +50,13 @@
             <button class="ui primary button" type="submit">Submit</button>
         </form>
     </div>
+
+    <script>
+        window.addEventListener('submit', () => {
+            document.getElementById("form").style.display = 'none';
+            document.getElementById("loading").classList.add('active');
+        });
+    </script>
 </body>
 
 </html>
