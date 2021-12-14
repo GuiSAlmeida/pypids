@@ -12,13 +12,11 @@ PLAT_PASSWORD = os.getenv('PLAT_PASSWORD')
 app = Flask(__name__)
 
 
-@app.route('/')
+@app.route('/', methods=['GET', 'POST'])
 def index():
-    return render_template('index.html')
+    if request.method == 'GET':
+        return render_template('index.html')
 
-
-@app.route('/', methods=['POST'])
-def add():
     parsed_list = []
     sanitized = 0
 
@@ -31,7 +29,7 @@ def add():
     with open(f'static/{filename}', 'r') as input_file:
         unique_list = [id[0] for id in unique_everseen(csv.reader(input_file))]
 
-    with open(f'output/{filename}.csv', 'w') as output_file:
+    with open(f'output/{filename}', 'w') as output_file:
         write_config = csv.writer(output_file)
 
         for id in unique_list:
