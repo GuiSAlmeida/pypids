@@ -46,16 +46,15 @@ docker images
 docker image history <yourname>/sherlock:<tag>
 
 # Run container with your own plat credencials,
-# if you create a .env file with your credencials skip this step.
+# with volume mapped to your local repository (pwd),
+# in http://localhost:5000/
 docker run -v $(pwd):/app \
 -p 5000:5000 \
 -e PLAT_USER='<yourUser>' \
 -e PLAT_PASSWORD='<yourPass>' \
 --name sherlock <yourname>/sherlock:<tag>
 
-# Run container in http://localhost:5000/
-docker container run -p 5000:5000 <yourname>/sherlock:<tag>
-
-# Run container with volume mapped to your local repository
-docker container run -v $(pwd):/app -p 5000:5000 <yourname>/sherlock:<tag>
+# After run container in the first time,
+# you can simple run start cmd next time.
+docker container start <container uuid>
 ```
